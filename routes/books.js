@@ -50,8 +50,8 @@ router.post('/books', (req, res, next) => {
 // UPDATE A SPECIFIC BOOK BY ID
 router.patch('/books/:id', (req, res, next) => {
   knex('books')
-    .where('id', req.params.id)
     .limit(1)
+    .where('id', req.params.id)
     .update(humps.decamelizeKeys({
       title: req.body.title,
       author: req.body.author,
