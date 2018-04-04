@@ -5,6 +5,7 @@ const humps = require('humps')
 const camelCase = require('camelcase-keys')
 const knex = require('../knex')
 const decamelize = require('decamelize')
+const bcrypt = require('bcrypt')
 
 // eslint-disable-next-line new-cap
 const router = express.Router()
@@ -82,7 +83,7 @@ router.delete('/books/:id', (req, res, next) => {
       }
       return knex('books')
         .where('id', req.params.id)
-        .then((row) => {
+        .then(() => {
           res.json(humps.camelizeKeys(finalObj))
         })
     })
