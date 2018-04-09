@@ -34,6 +34,7 @@ router.post('/token', (req, res, next) => {
     email: req.body.email
   }
   knex('users')
+    .when('email', req.body.email)
     .then((users) => {
       bcrypt.compare(req.body.password, users[0].hashed_password, (err, response) => {
         if (req.body.email === users[0].email && response) {
