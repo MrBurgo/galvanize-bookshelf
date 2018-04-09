@@ -37,17 +37,21 @@ router.post('/token', (req, res, next) => {
     .where('email', req.body.email)
     .then((users) => {
       console.log(users)
-      bcrypt.compare(req.body.password, users[0].hashed_password, (err, response) => {
-        if (req.body.email === users[0].email && response) {
-          user.id = users[0].id
-          user.firstName = users[0].first_name
-          user.lastName = users[0].last_name
-          const signedUser = jwt.sign(user, key)
-          res.cookie('token', signedUser, { path: '/', httpOnly: true }).json(user)
-        } else {
-          res.status(400).type('text/plain').send('Bad email or password')
-        }
-      })
+      if (users.length < 1){
+        res.status(400).type('text/plain').send('Bad email or password')
+      } else {
+        bcrypt.compare(req.body.password, users[0].hashed_password, (err, response) => {
+          if (req.body.email === users[0].email && response) {
+            user.id = users[0].id
+            user.firstName = users[0].first_name
+            user.lastName = users[0].last_name
+            const signedUser = jwt.sign(user, key)
+            res.cookie('token', signedUser, { path: '/', httpOnly: true }).json(user)
+          } else {
+            res.status(400).type('text/plain').send('Bad email or password')
+          }
+        })
+      }
     })
 })
 

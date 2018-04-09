@@ -29,11 +29,16 @@ router.get('/favorites/check?', (req, res, next) => {
   if (req.cookies.token) {
     knex('favorites')
       .join('books', 'books.id', 'favorites.book_id')
+      .where('book_id', req.query.bookId)
       .then((result) => {
-        if (parseInt(req.query.bookId) === result[0].book_id) {
-          res.json(true)
-        } else {
+        if (result.length < 1) {
           res.json(false)
+        } else {
+          if (parseInt(req.query.bookId) === result[0].book_id) {
+            res.json(true)
+          } else {
+            res.json(false)
+          }
         }
       })
   } else {
