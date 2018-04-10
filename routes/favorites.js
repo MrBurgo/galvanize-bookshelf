@@ -14,7 +14,10 @@ const router = express.Router();
 // YOUR CODE HERE
 router.get('/favorites', (req, res, next) => {
   if (req.cookies.token) {
+    const token = jwt.decode(req.cookies.token)
+    const { id } = token
     knex('favorites')
+      .where('user_id', id)
       .select('favorites.id', 'favorites.book_id', 'favorites.user_id', 'books.created_at', 'books.updated_at', 'books.title', 'books.author', 'books.genre', 'books.description', 'books.cover_url')
       .join('books', 'favorites.book_id', 'books.id')
       .then((favorites) => {
