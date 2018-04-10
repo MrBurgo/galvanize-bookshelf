@@ -30,7 +30,10 @@ router.get('/favorites', (req, res, next) => {
 
 router.get('/favorites/check?', (req, res, next) => {
   if (req.cookies.token) {
+    const token = jwt.decode(req.cookies.token)
+    const { id } = token
     knex('favorites')
+      .where('user_id', id)
       .join('books', 'books.id', 'favorites.book_id')
       .where('book_id', req.query.bookId)
       .then((result) => {
