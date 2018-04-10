@@ -36,7 +36,6 @@ router.post('/token', (req, res, next) => {
   knex('users')
     .where('email', req.body.email)
     .then((users) => {
-      console.log(users)
       if (users.length < 1){
         res.status(400).type('text/plain').send('Bad email or password')
       } else {
